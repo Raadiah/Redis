@@ -99,3 +99,37 @@ HMSET myuser name Peter sur_name Pan city Neverland
 HGET myuser city => Neverland
 ```
 In the [official documentation](https://redis.io/topics/data-types-intro) it says, *While hashes are handy to represent objects, actually the number of fields you can put inside a hash has no practical limits (other than available memory), so you can use hashes in many different ways inside your application.*
+
+### Creating a database
+
+Now, suppose you need a database of the schema: person. The description of the schema is:
+
+  Person Schema | 
+  ---------------------------------------------------------- | 
+  Person Id | 
+  National Id | 
+  Name | 
+
+
+
+Here, Person Id is auto increment. National Id is saved for unique person.
+
+So you can use the following structure to create the database. Firstly, we initialize Person_id with 0.
+
+``` 
+SET Person_id 0
+```
+
+When a new person registers:
+
+```
+INCREMENT Person_id => 1
+HMSET user:1 National_Id 6fYtthat Name Peter
+HSET users 6fYtthat 1
+
+```
+Here, every time a new person is registered the *Person_id* is increased by 1. Then at the *user:person_id* the information of the person is saved. To keep a set of all the users a hash *users* is created which is populated with *National_Id* (which is "6fYtthat") refering to the *Person_id*. 
+
+This is a common design pattern using key value data structure. That is how you make a database! Easy and fun, right?
+
+
